@@ -1,21 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useProfileStore } from '@/lib/stores';
+import { useProfileStore, useLangStore } from '@/lib/stores';
+import { t } from '@/src/i18n/strings';
 
 export default function ProfilePage() {
   const router = useRouter();
   const { setProfile } = useProfileStore();
+  const { lang, loadLang } = useLangStore();
   const [name, setName] = useState('');
   const [unit, setUnit] = useState('');
   const [season, setSeason] = useState('');
   const [error, setError] = useState('');
 
+  useEffect(() => { loadLang(); }, [loadLang]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim() || !unit.trim() || !season.trim()) {
-      setError('All fields are required');
+      setError(t('allFieldsRequired', lang));
       return;
     }
     const profile = {
@@ -32,54 +36,54 @@ export default function ProfilePage() {
   return (
     <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-6">
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold text-primary">Agent Profile</h1>
-        <p className="mt-1 text-sm text-primary/60">Set up your profile once</p>
+        <h1 className="text-2xl font-bold text-primary" dir="auto">{t('agentProfile', lang)}</h1>
+        <p className="mt-1 text-sm text-primary/60" dir="auto">{t('setUpProfile', lang)}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div>
-          <label className="mb-1 block text-sm font-medium text-primary-dark">Name</label>
+          <label className="mb-1 block text-sm font-medium text-primary-dark" dir="auto">{t('name', lang)}</label>
           <input
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
-            className="w-full rounded-xl border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            placeholder="Your full name"
+            className="w-full min-h-[44px] rounded-xl border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            placeholder={t('namePlaceholder', lang)}
             dir="auto"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-primary-dark">Unit</label>
+          <label className="mb-1 block text-sm font-medium text-primary-dark" dir="auto">{t('unit', lang)}</label>
           <input
             type="text"
             value={unit}
             onChange={e => setUnit(e.target.value)}
-            className="w-full rounded-xl border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            placeholder="Your unit / department"
+            className="w-full min-h-[44px] rounded-xl border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            placeholder={t('unitPlaceholder', lang)}
             dir="auto"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-primary-dark">Season</label>
+          <label className="mb-1 block text-sm font-medium text-primary-dark" dir="auto">{t('season', lang)}</label>
           <input
             type="text"
             value={season}
             onChange={e => setSeason(e.target.value)}
-            className="w-full rounded-xl border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            placeholder="e.g. 2025-2026"
+            className="w-full min-h-[44px] rounded-xl border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            placeholder={t('seasonPlaceholder', lang)}
             dir="auto"
           />
         </div>
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-red-500" dir="auto">{error}</p>}
 
         <button
           type="submit"
-          className="rounded-xl bg-primary py-4 text-lg font-semibold text-white shadow-lg active:scale-95"
+          className="min-h-[44px] rounded-xl bg-primary py-4 text-lg font-semibold text-white shadow-lg active:scale-95"
         >
-          Save & Continue
+          {t('saveAndContinue', lang)}
         </button>
       </form>
     </div>

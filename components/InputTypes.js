@@ -6,7 +6,7 @@ export function TextInput({ value, onChange, label }) {
       type="text"
       value={value || ''}
       onChange={e => onChange(e.target.value)}
-      className="w-full rounded-lg border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+      className="min-h-[44px] w-full rounded-lg border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
       placeholder={label}
       dir="auto"
     />
@@ -19,7 +19,7 @@ export function NumberInput({ value, onChange, label }) {
       type="number"
       value={value ?? ''}
       onChange={e => onChange(e.target.value ? Number(e.target.value) : '')}
-      className="w-full rounded-lg border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+      className="min-h-[44px] w-full rounded-lg border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
       placeholder={label}
     />
   );
@@ -31,19 +31,19 @@ export function DateInput({ value, onChange }) {
       type="date"
       value={value || ''}
       onChange={e => onChange(e.target.value)}
-      className="w-full rounded-lg border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+      className="min-h-[44px] w-full rounded-lg border border-primary/20 bg-white px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
     />
   );
 }
 
-export function StepperInput({ value, onChange, label }) {
+export function StepperInput({ value, onChange }) {
   const val = value ?? 0;
   return (
     <div className="flex items-center gap-3">
       <button
         type="button"
         onClick={() => onChange(Math.max(0, val - 1))}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white text-xl font-bold active:scale-95"
+        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-primary text-white text-xl font-bold active:scale-95"
       >
         −
       </button>
@@ -51,7 +51,7 @@ export function StepperInput({ value, onChange, label }) {
       <button
         type="button"
         onClick={() => onChange(val + 1)}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white text-xl font-bold active:scale-95"
+        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-primary text-white text-xl font-bold active:scale-95"
       >
         +
       </button>
@@ -73,7 +73,7 @@ export function ChipsInput({ value, onChange, choices }) {
               : [...selected, choice];
             onChange(next);
           }}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors active:scale-95 ${
+          className={`min-h-[44px] min-w-[44px] rounded-full px-4 py-2 text-sm font-medium transition-colors active:scale-95 ${
             selected.includes(choice)
               ? 'bg-primary text-white'
               : 'bg-surface-alt text-primary border border-primary/20'

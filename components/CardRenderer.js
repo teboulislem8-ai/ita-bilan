@@ -16,7 +16,7 @@ export default function CardRenderer({ card, value, onChange }) {
 
   return (
     <div className="rounded-xl border border-primary/10 bg-white p-4 shadow-sm">
-      <label className="mb-2 block text-sm font-semibold text-primary-dark">
+      <label className="mb-2 block text-sm font-semibold text-primary-dark" dir="auto">
         {card.label}
       </label>
       <Component
