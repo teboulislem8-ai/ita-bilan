@@ -1,38 +1,64 @@
-const CACHE = 'fdps-v1';
+const CACHE_NAME = 'ita-bilan-v1';
 
-const ASSETS = [
+const URLS_TO_CACHE = [
   '/',
-  '/form',
-  '/history',
-  '/settings',
-  '/profile',
-  '/card-setup',
+  '/index.html',
+  '/profile/',
+  '/card-setup/',
+  '/form/',
+  '/history/',
+  '/settings/',
+  '/manifest.json',
   '/fonts/Cairo-Latin.woff2',
   '/fonts/Cairo-LatinExt.woff2',
   '/fonts/Cairo-Arabic.woff2',
-  '/manifest.json',
   '/icon-192.svg',
-  '/icon-512.svg',
+  '/icon-512.svg'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS))
+// Install
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(URLS_TO_CACHE);
+    })
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
+// Activate
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((cached) => cached || fetch(e.request))
+// Fetch
+self.addEventListener('fetch', (event) => {
+  const url = event.request.url;
+
+  // Ignore Next.js RSC/internal requests
+  if (
+    url.includes('?_rsc=') ||
+    url.includes('__next') ||
+    url.endsWith('.txt')
+  ) {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(event.request).then((networkResponse) => {
+        const responseClone = networkResponse.clone();
+
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseClone);
+        });
+
+        return networkResponse;
+      });
+    })
   );
 });
